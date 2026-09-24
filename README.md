@@ -1,31 +1,45 @@
-# CAI SOC Analyst AWS Demo
+# CAI SOC Analyst — Local Demo
 
-Presentation-ready clone of the user's CAI / AI-SOC-Analyst workflow.
+A CPU-friendly presentation build of the CAI / AI-SOC-Analyst workflow.
 
-## Demo flow
-1. Open the dashboard.
-2. Show SOC metrics and system health.
-3. Run the built-in suspicious PowerShell investigation.
-4. Show extracted IPs, URLs and hashes.
-5. Show MITRE ATT&CK mappings, risk score and recommended actions.
-6. Open Investigation History.
-7. Search MITRE ATT&CK.
-8. Paste custom CTI text and analyze it.
+## Included
+- FastAPI analyst backend
+- CTI text and PDF ingestion
+- IPv4, URL, domain, MD5, SHA-1, SHA-256 and email extraction
+- MITRE ATT&CK technique mapping
+- Lightweight evidence retrieval (RAG-style)
+- Risk scoring and response recommendations
+- SQLite investigation persistence
+- Investigation history and case detail
+- Optional Ollama assessment when Ollama is available locally
+- Responsive analyst dashboard
+- Docker + GitHub Actions smoke tests
 
-## AWS deployment
-Ubuntu EC2 + Docker + FastAPI. The app listens on port 80 through Docker and needs an EC2 security-group rule for TCP 80.
+## Run locally
 
-Commands:
+```bash
+open -a Docker
 git clone https://github.com/AbbhhiramJ/SOC-Analyst-AWS-Demo.git
 cd SOC-Analyst-AWS-Demo
 docker compose up -d --build
+```
 
-Then open http://YOUR_EC2_PUBLIC_IP
+Open http://localhost
 
-## Why demo mode
-The original CAI uses FastAPI, React, CTI ingestion, IoC extraction, MITRE ATT&CK context, RAG and Ollama. This AWS demo keeps the analyst workflow but uses deterministic local analysis so a small EC2 instance can run it without a GPU, Ollama or an external AI API key.
+Health:
+```bash
+curl http://localhost/api/v1/health
+```
 
-## Architecture
-Browser -> AWS EC2 -> FastAPI -> CTI extraction -> MITRE mapping -> risk scoring -> investigation history.
+## Demo sequence
+1. Dashboard
+2. Run demo investigation
+3. Show IoCs and ATT&CK mappings
+4. Show retrieved evidence and response actions
+5. Upload a PDF or paste CTI
+6. Open Investigation History
+7. Search MITRE ATT&CK
+8. Show Architecture
 
-For a production AI version, the deterministic analysis layer can be replaced by the original RAG + Ollama/LLM services.
+## Relationship to the original CAI
+The original project uses FastAPI, React, CTI ingestion, IoC extraction, MITRE ATT&CK context, TF-IDF-style RAG and optional local Ollama analysis. This demo keeps those analyst workflows while using a compact single-container implementation suitable for a laptop or small EC2 instance.
