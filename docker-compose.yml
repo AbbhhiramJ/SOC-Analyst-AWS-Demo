@@ -1,0 +1,6 @@
+services:
+  cai-soc-demo:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "80:8000"
