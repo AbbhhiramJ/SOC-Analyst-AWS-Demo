@@ -1,0 +1,23 @@
+name: AWS Demo CI
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build image
+        run: docker build -t cai-soc-demo .
+      - name: Start container
+        run: |
+          docker run -d --name cai-soc-demo -p 8000:8000 cai-soc-demo
+          for i in {1..20}; do curl -fsS http://127.0.0.1:8000/api/v1/health && break; sleep 2; done
+      - name: Smoke test
+        run: |
+          curl -fsS http://127.0.0.1:8000/api/v1/health
+          curl -fsS http://127.0.0.1:8000/api/v1/dashboard
+          curl -fsS http://127.0.0.1:8000/api/v1/demo/report
+          curl -fsS 'http://127.0.0.1:8000/api/v1/mitre/search?q=PowerShell'
